@@ -3,17 +3,20 @@ from django.db import models
 class Innovator(models.Model):
     first_name = models.CharField(max_length=50,default=0)
     last_name = models.CharField(max_length=50,default=1)
-    username = models.CharField(primary_key=True, max_length=50,default=0)
+    username = models.CharField(primary_key=True,unique=True, max_length=50,default=0)
     password = models.CharField(max_length=50,default=0)
     age = models.PositiveIntegerField()
     profile_image = models.ImageField(upload_to='home/project_image/innovation_image', blank=True, null=True)
-    date_of_birth = models.DateField(auto_now=False, auto_now_add=False,default=1012001)
     email = models.EmailField(unique=True,default=0)
     contact_number = models.BigIntegerField(default=123456789)
     company_name = models.CharField(max_length=50, blank=True, null=True)
     project_list = models.IntegerField(blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     no_of_projects = models.PositiveIntegerField(blank=True, null=True)
+    desc = models.CharField(max_length=500,default=None)
+    education = models.CharField(max_length=100,default=None)
+    professional_history = models.CharField(max_length=500,default=None)
+    interest = models.CharField(max_length=50,default=None)
 
     def __str__(self):
         return self.username
@@ -21,11 +24,11 @@ class Innovator(models.Model):
 class Investor(models.Model):
     first_name = models.CharField(max_length=50,default=0)
     last_name = models.CharField(max_length=50,default=0)
-    username = models.CharField(primary_key=True, max_length=50)
+    username = models.CharField(primary_key=True,unique=True, max_length=50)
     password = models.CharField(max_length=50)
     profile_image = models.ImageField(upload_to='home/project_image/investor_image')
     age = models.PositiveIntegerField()
-    date_of_birth = models.DateField(auto_now=False, auto_now_add=False,default=1012001)
+    date_of_birth = models.DateField(auto_now=False, auto_now_add=False,default='2001-01-01')
     email = models.EmailField(unique=True,default=0)
     contact_number = models.BigIntegerField(default=1112223333)
     project_list = models.ManyToManyField('Project', related_name='investors')
@@ -42,8 +45,10 @@ class Project(models.Model):
         (3, 'Donation'),
         (4, 'Reward'),
     ]
+    project_id = models.CharField(primary_key=True,unique=True, max_length=50,default=None)
     project_name = models.CharField(max_length=200)
-    description = models.CharField(max_length=500)
+    owner_username = models.CharField(max_length=50,default=None)
+    description = models.CharField(max_length=500,default=None)
     funding_goal = models.DecimalField(max_digits=8, decimal_places=2)
     amount_raised = models.DecimalField(max_digits=8, decimal_places=2, default='0')
     number_of_investors = models.PositiveSmallIntegerField(default=0)
